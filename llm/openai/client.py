@@ -10,7 +10,7 @@ load_dotenv()
 class OpenAILLM(BaseLLM):
     def __init__(self):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.default_model = "gpt-5"
+        self.default_model = "gpt-5-nano"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model

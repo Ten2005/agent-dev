@@ -14,7 +14,7 @@ class GrokLLM(BaseLLM):
             api_key=os.getenv("XAI_API_KEY"),
             timeout=3600,
         )
-        self.default_model = "grok-4-fast-reasoning"
+        self.default_model = "grok-code-fast-1"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model

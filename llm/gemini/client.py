@@ -11,7 +11,7 @@ load_dotenv()
 class GeminiLLM(BaseLLM):
     def __init__(self):
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        self.default_model = "gemini-2.5-flash"
+        self.default_model = "gemini-2.5-flash-lite"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model

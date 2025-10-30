@@ -13,11 +13,13 @@ load_dotenv()
 class TestBool(BaseModel):
     bool: bool
 
+def print_divider(text: str):
+    print("\n" + "-" * 20 + "\n" + text + "\n" + "-" * 20 + "\n")
 
 def main():
     print("Hello from agents dev!")
 
-    print("\n" + "-" * 10 + "\nAPI Keys\n" + "-" * 10 + "\n")
+    print_divider("API Keys")
     api_keys = ["OPENAI", "ANTHROPIC", "GEMINI", "XAI"]
     for key in api_keys:
         print(
@@ -33,12 +35,12 @@ def main():
         "openai": llm.openai.client.OpenAILLM(),
     }
 
-    print("\n" + "-" * 10 + "\nLLM Clients\n" + "-" * 10 + "\n")
+    print_divider("LLM Clients")
     for name, client in llm_clients.items():
         response = client.single_response([Message(role="user", content=prompt)])
         print(f"{name}: {response.content}")
 
-    print("\n" + "-" * 10 + "\nStructured Response\n" + "-" * 10 + "\n")
+    print_divider("Structured Response")
     for name, client in llm_clients.items():
         response = client.structured_response(
             [Message(role="user", content=structured_prompt)], schema=TestBool
