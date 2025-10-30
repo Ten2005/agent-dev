@@ -1,4 +1,4 @@
-PHONY: fmt, lint, fix, mypy, all
+.PHONY: fmt lint fix mypy test all
 
 fmt:
 	ruff format .
@@ -12,8 +12,7 @@ fix:
 mypy:
 	mypy .
 
-all:
-	make fmt
-	make lint
-	make fix
-	make mypy
+test:
+	pytest test/ -v
+
+all: fmt lint fix mypy test
