@@ -10,7 +10,7 @@ class TokenDepthInfo:
 
 
 class InfoDensityAnalyzer:
-    def __init__(self, model_name: str = "en_core_web_trf", normalize: bool = True):
+    def __init__(self, model_name: str = "en_core_web_sm", normalize: bool = True):
         self.model_name = model_name
         self.normalize = normalize
         self._nlp: Optional[spacy.language.Language] = None
@@ -59,6 +59,6 @@ class InfoDensityAnalyzer:
 
 if __name__ == "__main__":
     text = "Apple is looking at buying U.K. startup for $1 billion"
-    analyzer = InfoDensityAnalyzer("en_core_web_trf")
+    analyzer = InfoDensityAnalyzer("en_core_web_sm")
     results = analyzer.analyze(text)
     print(results)
