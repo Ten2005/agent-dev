@@ -1,10 +1,18 @@
 import spacy
 from typing import Optional
+from dataclasses import dataclass
+
+
+@dataclass
+class TokenDepthInfo:
+    text: str
+    depth: float
 
 
 class InfoDensityAnalyzer:
-    def __init__(self, model_name: str = "en_core_web_trf"):
+    def __init__(self, model_name: str = "en_core_web_trf", normalize: bool = True):
         self.model_name = model_name
+        self.normalize = normalize
         self._nlp: Optional[spacy.language.Language] = None
 
     @property
@@ -13,7 +21,9 @@ class InfoDensityAnalyzer:
             self._nlp = spacy.load(self.model_name)
         return self._nlp
 
-    def _calculate_depth(self, idx: int, token, cache: dict[int, int]) -> int:
+    def _calculate_depth(
+        self, idx: int, token: spacy.tokens.Token, cache: dict[int, int]
+    ) -> int:
         if idx in cache:
             return cache[idx]
 
@@ -25,7 +35,7 @@ class InfoDensityAnalyzer:
         cache[idx] = depth
         return depth
 
-    def analyze(self, text: str) -> list[dict[str, str | float]]:
+    def analyze(self, text: str) -> list[TokenDepthInfo]:
         doc = self.nlp(text)
 
         if not doc:
@@ -36,15 +46,15 @@ class InfoDensityAnalyzer:
             self._calculate_depth(idx, token, depth_cache)
             for idx, token in enumerate(doc)
         ]
-        max_depth = max(depths, default=1) or 1
+        max_depth = max(depths, default=1) if self.normalize else 1
 
         return [
-            {
-                "text": token.text,
-                "depth": depth / max_depth,
-            }
+            TokenDepthInfo(text=token.text, depth=depth / max_depth)
             for token, depth in zip(doc, depths)
         ]
+
+    def analyze_batch(self, texts: list[str]) -> list[list[TokenDepthInfo]]:
+        return [self.analyze(text) for text in texts]
 
 
 if __name__ == "__main__":
