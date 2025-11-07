@@ -1,6 +1,7 @@
 import spacy
 from typing import Optional
 from dataclasses import dataclass
+from utils.data_handler import DataHandler
 
 
 @dataclass
@@ -58,7 +59,8 @@ class InfoDensityAnalyzer:
 
 
 if __name__ == "__main__":
-    text = "Apple is looking at buying U.K. startup for $1 billion"
+    data_handler = DataHandler(base_folder="documents/sample")
+    text = data_handler.load("info_density_sample.txt")
     analyzer = InfoDensityAnalyzer("en_core_web_sm")
     results = analyzer.analyze(text)
     print(results)
