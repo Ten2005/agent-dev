@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 import os
 import llm.anthropic.client
 import llm.grok.client
-import llm.gemini.client
 import llm.openai.client
 from llm.base import Message
 from pydantic import BaseModel
@@ -42,7 +41,6 @@ def main(
     llm_clients = {
         "anthropic": llm.anthropic.client.AnthropicLLM(),
         "grok": llm.grok.client.GrokLLM(),
-        "gemini": llm.gemini.client.GeminiLLM(),
         "openai": llm.openai.client.OpenAILLM(),
     }
     if call:
@@ -74,4 +72,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main(api_key=False, call=False, structured=False, embedding=True)
+    main(api_key=True, call=True, structured=True, embedding=True)

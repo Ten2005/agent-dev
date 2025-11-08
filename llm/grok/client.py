@@ -4,6 +4,7 @@ from xai_sdk.chat import user, system, assistant
 from dotenv import load_dotenv
 from llm.base import BaseLLM, Message, LLMResponse, Model, T
 from typing import Type
+from xai_sdk.tools import web_search, x_search
 
 load_dotenv()
 
@@ -14,7 +15,7 @@ class GrokLLM(BaseLLM):
             api_key=os.getenv("XAI_API_KEY"),
             timeout=3600,
         )
-        self.default_model = "grok-code-fast-1"
+        self.default_model = "grok-4-fast-reasoning"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model
@@ -33,7 +34,9 @@ class GrokLLM(BaseLLM):
         self, messages: list[Message], model: Model | None = None
     ) -> LLMResponse:
         model_name = self._initialize_model(model)
-        chat = self.client.chat.create(model=model_name)
+        chat = self.client.chat.create(
+            model=model_name, tools=[web_search(), x_search()]
+        )
 
         self._append_messages_to_chat(chat, messages)
 
@@ -45,7 +48,9 @@ class GrokLLM(BaseLLM):
         self, messages: list[Message], schema: Type[T], model: Model | None = None
     ) -> T:
         model_name = self._initialize_model(model)
-        chat = self.client.chat.create(model=model_name)
+        chat = self.client.chat.create(
+            model=model_name, tools=[web_search(), x_search()]
+        )
 
         self._append_messages_to_chat(chat, messages)
 

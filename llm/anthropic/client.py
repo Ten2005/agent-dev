@@ -10,7 +10,7 @@ load_dotenv()
 class AnthropicLLM(BaseLLM):
     def __init__(self):
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-        self.default_model = "claude-haiku-4-5"
+        self.default_model = "claude-sonnet-4-5"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model
@@ -30,6 +30,9 @@ class AnthropicLLM(BaseLLM):
             model=model_name,
             max_tokens=1024,
             messages=anthropic_messages,
+            tools=[
+                {"type": "web_search_20250305", "name": "web_search", "max_uses": 5}
+            ],
         )
 
         return LLMResponse(content=response.content[0].text)
@@ -49,7 +52,8 @@ class AnthropicLLM(BaseLLM):
                 "name": "output_formatter",
                 "description": "Format the response according to the schema",
                 "input_schema": json_schema,
-            }
+            },
+            {"type": "web_search_20250305", "name": "web_search", "max_uses": 5},
         ]
 
         # Claude APIを呼び出し
