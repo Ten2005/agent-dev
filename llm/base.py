@@ -23,6 +23,8 @@ class LLMResponse:
 
 
 class BaseLLM(ABC):
+    name: str
+
     @abstractmethod
     def single_response(
         self, messages: list[Message], model: Model | None = None

@@ -7,9 +7,7 @@ from typing import Any, Optional
 class DataHandler:
     def __init__(self, base_folder: Optional[str] = None):
         if base_folder is None:
-            base_folder = os.path.join(
-                os.path.dirname(__file__), "..", "documents", "sample"
-            )
+            base_folder = os.path.join(os.path.dirname(__file__), "..", "documents")
         self.folder_path = Path(base_folder).resolve()
         self.folder_path.mkdir(parents=True, exist_ok=True)
 
@@ -26,6 +24,7 @@ class DataHandler:
     def save(self, data: Any, file_name: str, format: str = "str") -> None:
         file_path = self.folder_path / file_name
         try:
+            file_path.parent.mkdir(parents=True, exist_ok=True)
             with open(file_path, "w") as f:
                 if format == "json":
                     json.dump(data, f, indent=2)

@@ -13,6 +13,7 @@ class OpenAILLM(BaseLLM):
     ):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.default_model = "gpt-5"
+        self.name = "openai"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model

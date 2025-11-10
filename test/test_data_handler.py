@@ -17,9 +17,7 @@ class TestDataHandlerInit:
         """デフォルトパスで初期化"""
         handler = DataHandler()
         assert handler.folder_path is not None
-        assert "documents/sample" in str(
-            handler.folder_path
-        ) or "documents\\sample" in str(handler.folder_path)
+        assert "documents" in str(handler.folder_path)
 
     def test_init_with_custom_path(self):
         """カスタムパスで初期化"""
