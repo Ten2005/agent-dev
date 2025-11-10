@@ -1,7 +1,6 @@
 import anthropic
 import os
 from dotenv import load_dotenv
-
 from llm.base import BaseLLM, Message, LLMResponse, Model, T
 
 load_dotenv()
@@ -25,7 +24,6 @@ class AnthropicLLM(BaseLLM):
     ) -> LLMResponse:
         model_name = self._initialize_model(model)
         anthropic_messages = self._convert_messages(messages)
-
         response = self.client.messages.create(
             model=model_name,
             max_tokens=1024,
@@ -34,7 +32,6 @@ class AnthropicLLM(BaseLLM):
                 {"type": "web_search_20250305", "name": "web_search", "max_uses": 5}
             ],
         )
-
         return LLMResponse(content=response.content[0].text)
 
     def structured_response(
@@ -42,11 +39,7 @@ class AnthropicLLM(BaseLLM):
     ) -> T:
         model_name = self._initialize_model(model)
         anthropic_messages = self._convert_messages(messages)
-
-        # Pydanticモデルから JSON Schemaを生成
         json_schema = schema.model_json_schema()
-
-        # ツール定義を作成
         tools = [
             {
                 "name": "output_formatter",
@@ -55,8 +48,6 @@ class AnthropicLLM(BaseLLM):
             },
             {"type": "web_search_20250305", "name": "web_search", "max_uses": 5},
         ]
-
-        # Claude APIを呼び出し
         response = self.client.messages.create(
             model=model_name,
             max_tokens=1024,
@@ -64,10 +55,7 @@ class AnthropicLLM(BaseLLM):
             tool_choice={"type": "tool", "name": "output_formatter"},
             messages=anthropic_messages,
         )
-
-        # ツール呼び出しからJSONデータを抽出
         for content in response.content:
             if content.type == "tool_use" and content.name == "output_formatter":
                 return schema(**content.input)
-
         raise ValueError("Tool response not found in Claude response")

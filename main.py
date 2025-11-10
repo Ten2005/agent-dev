@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import llm.anthropic.client
+import llm.gemini.client
 import llm.grok.client
 import llm.openai.client
 from llm.base import Message
@@ -40,6 +41,7 @@ def main(
     structured_prompt = "Say just True"
     llm_clients = {
         "anthropic": llm.anthropic.client.AnthropicLLM(),
+        "gemini": llm.gemini.client.GeminiLLM(),
         "grok": llm.grok.client.GrokLLM(),
         "openai": llm.openai.client.OpenAILLM(),
     }
