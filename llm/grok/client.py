@@ -37,23 +37,15 @@ class GrokLLM(BaseLLM):
         chat = self.client.chat.create(
             model=model_name, tools=[web_search(), x_search()]
         )
-
         self._append_messages_to_chat(chat, messages)
-
         response = chat.sample()
-
         return LLMResponse(content=response.content)
 
     def structured_response(
         self, messages: list[Message], schema: Type[T], model: Model | None = None
     ) -> T:
         model_name = self._initialize_model(model)
-        chat = self.client.chat.create(
-            model=model_name, tools=[web_search(), x_search()]
-        )
-
+        chat = self.client.chat.create(model=model_name)
         self._append_messages_to_chat(chat, messages)
-
-        # Use chat.parse() to get structured output as Pydantic model
         _, parsed_object = chat.parse(schema)
         return parsed_object

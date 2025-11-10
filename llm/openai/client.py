@@ -8,7 +8,9 @@ load_dotenv()
 
 
 class OpenAILLM(BaseLLM):
-    def __init__(self):
+    def __init__(
+        self,
+    ):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.default_model = "gpt-5"
 
@@ -25,13 +27,11 @@ class OpenAILLM(BaseLLM):
     ) -> LLMResponse:
         model_name = self._initialize_model(model)
         openai_messages = self._convert_messages(messages)
-
         response = self.client.responses.create(
             model=model_name,
             tools=[{"type": "web_search"}],
             input=openai_messages,
         )
-
         return LLMResponse(content=response.output_text)
 
     def structured_response(
@@ -39,12 +39,10 @@ class OpenAILLM(BaseLLM):
     ) -> T:
         model_name = self._initialize_model(model)
         openai_messages = self._convert_messages(messages)
-
         response = self.client.responses.parse(
             model=model_name,
             tools=[{"type": "web_search"}],
             input=openai_messages,
             text_format=schema,
         )
-
         return response.output_parsed
