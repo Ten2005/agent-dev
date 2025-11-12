@@ -10,6 +10,7 @@ class AnthropicLLM(BaseLLM):
     def __init__(self):
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.default_model = "claude-sonnet-4-5"
+        self.name = "anthropic"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model

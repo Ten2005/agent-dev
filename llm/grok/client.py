@@ -16,6 +16,7 @@ class GrokLLM(BaseLLM):
             timeout=3600,
         )
         self.default_model = "grok-4-fast-reasoning"
+        self.name = "grok"
 
     def _initialize_model(self, model: Model | None) -> str:
         return model.name if model else self.default_model
